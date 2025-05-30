@@ -34,9 +34,4 @@ P.S.
 -   Make your launch go viral and get your first customers with [LaunchViral](https://launchvir.al/?ref=shipfast_readme) 🚀
 -   Stop paying 0.4% per Stripe invoices [Zenvoice](https://zenvoice.io/?ref=shipfast_readme) 🤕
 
-git clone https://github.com/Marc-Lou-Org/ship-fast-ts.git GraderAI
-cd GraderAI
-git checkout supabase
-npm install
-git remote remove origin
-npm run dev
+
