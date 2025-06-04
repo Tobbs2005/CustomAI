@@ -105,6 +105,11 @@ export async function POST(req: NextRequest) {
         //   console.error("Email issue:" + e?.message);
         // }
 
+
+        // Add tokens to user
+
+        console.log(priceId);
+
         break;
       }
 
@@ -162,6 +167,9 @@ export async function POST(req: NextRequest) {
           .eq("customer_id", customerId);
 
         break;
+
+        // Grant tokens to user
+        const numTokens = stripeObject.lines.data[0].pric
 
       }
 

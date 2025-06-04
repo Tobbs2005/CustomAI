@@ -36,6 +36,7 @@ export interface ConfigProps {
       priceId: string;
       name: string;
       description?: string;
+      numTokens?: number;
       price: number;
       priceAnchor?: number;
       features: {

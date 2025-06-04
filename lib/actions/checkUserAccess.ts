@@ -1,11 +1,9 @@
 
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@/libs/supabase/server";
 
 const checkUserAccess = async () => {
         
-    const supabaseUrl = 'https://kaacxhillyqufbfeqojb.supabase.co'
-    const supabaseKey = process.env.SUPABASE_KEY
-    const supabase = createClient(supabaseUrl, supabaseKey)
+    const supabase = createClient();
 
     const {
         data: { user },
