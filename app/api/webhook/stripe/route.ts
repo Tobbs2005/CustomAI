@@ -162,6 +162,7 @@ export async function POST(req: NextRequest) {
           .eq("customer_id", customerId);
 
         break;
+
       }
 
       case "invoice.payment_failed":

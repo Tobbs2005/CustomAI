@@ -1,6 +1,8 @@
 import Image from "next/image";
 import TestimonialsAvatars from "./TestimonialsAvatars";
 import config from "@/config";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 const Hero = () => {
   return (
@@ -27,10 +29,13 @@ const Hero = () => {
         <p className="text-lg opacity-80 leading-relaxed">
           Instantly grades student papers on the click of a button.
         </p>
-        <button className="btn btn-primary btn-wide">
-          Get {config.appName}
-        </button>
-
+        <div>
+        <Link href={'/dashboard'}>
+          <Button>
+            Get {config.appName}
+          </Button>
+        </Link>
+        </div>
         <TestimonialsAvatars priority={true} />
       </div>
       <div className="lg:w-full">

@@ -11,9 +11,6 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
-      <Suspense>
-        <Header />
-      </Suspense>
       <main>
         <Hero />
         <Problem />
