@@ -1,3 +1,4 @@
+import config from "@/config";
 import configFile from "@/config";
 import { findCheckoutSession } from "@/libs/stripe";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -89,12 +90,24 @@ export async function POST(req: NextRequest) {
           user = profile;
         }
 
+        // Add tokens to user
+        const matchedPlan = config.stripe.plans.find(
+            (plan) => plan.priceId === priceId
+        );
+
+        let tokenToAdd = matchedPlan?.numTokens;
+
+        // add onto existing tokens
+        tokenToAdd += user.token_count;
+
         await supabase
           .from("profiles")
           .update({
             customer_id: customerId,
             price_id: priceId,
             has_access: true,
+            token_count: tokenToAdd,
+
           })
           .eq("id", user?.id);
 
@@ -106,9 +119,8 @@ export async function POST(req: NextRequest) {
         // }
 
 
-        // Add tokens to user
+        
 
-        console.log(priceId);
 
         break;
       }
@@ -169,7 +181,7 @@ export async function POST(req: NextRequest) {
         break;
 
         // Grant tokens to user
-        const numTokens = stripeObject.lines.data[0].pric
+        
 
       }
 

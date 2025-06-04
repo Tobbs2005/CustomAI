@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import promptLLM from '@/lib/actions/promptLLM';
+import deductTokens from '@/lib/actions/deductTokens';
 
 enum UserState {
   READY = 'READY',
-  FETCHING = 'FETCHING'
+  FETCHING = 'FETCHING',
+  OUT_OF_TOKENS = 'OUT_OF_TOKENS'
 }
 
 const Chatbox = () => {
@@ -28,6 +30,9 @@ const Chatbox = () => {
       console.error("Error calling LLM:", error);
       setResponseText("Something went wrong.");
     }
+
+    // ERROR You're importing a component that needs next/headers.
+    //deductTokens(300);
 
   };
 
@@ -51,8 +56,14 @@ const Chatbox = () => {
           <Button onClick={handleSubmit} className="mt-2">
             Submit
           </Button>
-        ) : 
-        <Button disabled className="mt-2 blur">
+        ) 
+        : 
+        userState === UserState.OUT_OF_TOKENS ?
+        <Button disabled className="mt-2"> 
+          Out of tokens
+        </Button>
+        :
+        <Button disabled className="mt-2">
           Waiting
         </Button>
         }
