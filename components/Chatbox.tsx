@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import promptLLM from '@/lib/actions/promptLLM';
+import newMessage from '@/lib/actions/newMessage';
 
 enum UserState {
   READY = 'READY',
@@ -47,7 +48,7 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
     setUserInput("");
     try {
       setUserState(UserState.FETCHING)
-      const res = await promptLLM({ userMessage: submittedText }); 
+      const res = await newMessage({ userMessage: submittedText, cost: 1, chatId: chatId}); 
       setUserState(UserState.READY);
       setResponseText(res);
     } catch (error) {

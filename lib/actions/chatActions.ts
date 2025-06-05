@@ -23,10 +23,10 @@ const newChat = async () => {
     .insert([{ user_id: user.id }])
     .select()
     .single();
-    if (error) {
-      console.error("Error creating chat:", error.message);
-      throw new Error(error.message)
-    }
+  if (error) {
+    console.error("Error creating chat:", error.message);
+    throw new Error(error.message)
+  }
   
     return data;
 }
