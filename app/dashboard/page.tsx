@@ -1,11 +1,8 @@
 
 import ButtonAccount from "@/components/ButtonAccount";
-import Chatbox from "@/components/Chatbox";
 import Pricing from "@/components/Pricing";
 import checkUserAccess from "@/lib/actions/checkUserAccess";
-import getTokenCount from "@/lib/actions/getTokenCount";
-import Link from "next/link";
-
+import NewChatButton from "@/components/NewChatButton";
 
 export const dynamic = "force-dynamic";
 
@@ -17,10 +14,7 @@ export default async function Dashboard() {
 
         {checkUserAccess ? 
         <div>
-          <Chatbox />
-          <Link href={'/products'}>
-            <p className="text-sm text-primary underline hover:text-primary/80 transition">Add more credits?</p>
-          </Link>
+          <NewChatButton />
         </div>
         :
         <div>

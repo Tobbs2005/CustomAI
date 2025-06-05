@@ -12,7 +12,11 @@ enum UserState {
   OUT_OF_TOKENS = 'OUT_OF_TOKENS'
 }
 
-const Chatbox = () => {
+interface ChatboxProps {
+  chatId: string;
+}
+
+const Chatbox = ({ chatId }: ChatboxProps) => {
   const [userState, setUserState] = useState<UserState>(UserState.READY);
   const [userInput, setUserInput] = useState("");
   const [responseText, setResponseText] = useState<string | null>(null);
