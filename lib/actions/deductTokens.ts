@@ -1,7 +1,7 @@
 import { createClient } from "@/libs/supabase/server";
 import getTokenCount from "./getTokenCount";
 
-export const deductTokens = async (numDeduct: number) => {
+const deductTokens = async (numDeduct: number) => {
     const supabase = createClient();
 
     const {
@@ -25,3 +25,5 @@ export const deductTokens = async (numDeduct: number) => {
           .eq("id", user?.id);
 
 }
+
+export default deductTokens;
