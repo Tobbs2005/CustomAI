@@ -1,4 +1,4 @@
-import { createClient } from "@/libs/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import getTokenCount from "./getTokenCount";
 
 const deductTokens = async (numDeduct: number) => {

@@ -1,5 +1,5 @@
 
-import { createClient } from "@/libs/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 const checkUserAccess = async () => {
         

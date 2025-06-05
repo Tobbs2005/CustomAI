@@ -35,7 +35,7 @@ const Chatbox = () => {
   const handleSubmit = async () => {
     const submittedText = userInput
 
-    if(tokenCount<500){
+    if(tokenCount<1){
       setResponseText("Out of tokens");
       setUserState(UserState.OUT_OF_TOKENS);
       return;
@@ -59,7 +59,7 @@ const Chatbox = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ amount: 500 }), // send the number of tokens to deduct
+      body: JSON.stringify({ amount: 1 }), // send the number of tokens to deduct
     });
     fetchTokenCount();
     const data = await deductRes.json();
