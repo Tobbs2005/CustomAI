@@ -1,3 +1,4 @@
+
 import ButtonAccount from "@/components/ButtonAccount";
 import Chatbox from "@/components/Chatbox";
 import Pricing from "@/components/Pricing";
@@ -17,7 +18,6 @@ export default async function Dashboard() {
         {checkUserAccess ? 
         <div>
           <Chatbox />
-          <p>Remaining Credits: { getTokenCount() }</p>
           <Link href={'/products'}>
             <p className="text-sm text-primary underline hover:text-primary/80 transition">Add more credits?</p>
           </Link>

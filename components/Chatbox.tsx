@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import promptLLM from '@/lib/actions/promptLLM';
-import deductTokens from '@/lib/actions/deductTokens';
 
 enum UserState {
   READY = 'READY',
@@ -21,6 +20,18 @@ const Chatbox = () => {
     const submittedText = userInput
 
     setUserInput("");
+    const deductRes = await fetch('/api/deduct-tokens', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ amount: 100 }), // send the number of tokens to deduct
+    });
+
+    const data = await deductRes.json();
+    
+
+
     try {
       setUserState(UserState.FETCHING)
       const res = await promptLLM({ userMessage: submittedText }); 
@@ -29,12 +40,9 @@ const Chatbox = () => {
     } catch (error) {
       console.error("Error calling LLM:", error);
       setResponseText("Something went wrong.");
+      setUserState(UserState.READY);
     }
-
-    // ERROR You're importing a component that needs next/headers.
-    //deductTokens(300);
-
-  };
+  }
 
   return (
     <main>
