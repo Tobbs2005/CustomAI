@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import promptLLM from '@/lib/actions/promptLLM';
+import getTokenCount from '@/lib/actions/getTokenCount';
 
 enum UserState {
   READY = 'READY',
@@ -15,23 +16,26 @@ const Chatbox = () => {
   const [userState, setUserState] = useState<UserState>(UserState.READY);
   const [userInput, setUserInput] = useState("");
   const [responseText, setResponseText] = useState<string | null>(null);
+  const [tokenCount, setTokenCount] = useState<number | null>(null)
+
+  const fetchTokenCount = async () => {
+    const res = await fetch('/api/get-token-count');
+    const data = await res.json();
+    if (data.success) {
+      setTokenCount(data.token_count);
+    } else {
+      setUserState(UserState.OUT_OF_TOKENS);
+    }
+  };
+
+  fetchTokenCount();
+
+  
 
   const handleSubmit = async () => {
     const submittedText = userInput
 
     setUserInput("");
-    const deductRes = await fetch('/api/deduct-tokens', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount: 100 }), // send the number of tokens to deduct
-    });
-
-    const data = await deductRes.json();
-    
-
-
     try {
       setUserState(UserState.FETCHING)
       const res = await promptLLM({ userMessage: submittedText }); 
@@ -42,6 +46,17 @@ const Chatbox = () => {
       setResponseText("Something went wrong.");
       setUserState(UserState.READY);
     }
+
+
+    const deductRes = await fetch('/api/deduct-tokens', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ amount: 100 }), // send the number of tokens to deduct
+    });
+    fetchTokenCount();
+    const data = await deductRes.json();
   }
 
   return (
@@ -78,6 +93,8 @@ const Chatbox = () => {
 
         
       </div>
+
+      <p>Token count: {tokenCount ?? "Loading..."}</p>
     </main>
   );
 };

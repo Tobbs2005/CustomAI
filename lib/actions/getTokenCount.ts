@@ -9,17 +9,24 @@ const getTokenCount = async () => {
   } = await supabase.auth.getUser();
 
   if (!user || userError) {
+    console.error("getUser failed:", userError);
     throw new Error("No user session found");
   }
 
-  const { data: profile, error } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("token_count")
     .eq("id", user.id)
     .single();
 
-  if (error) {
-    throw new Error(error.message);
+  if (profileError) {
+    console.error("Error fetching profile:", profileError);
+    throw new Error("Failed to fetch profile");
+  }
+
+  if (!profile) {
+    console.error("No profile row found for user:", user.id);
+    throw new Error("No profile data found");
   }
 
   return profile.token_count;
