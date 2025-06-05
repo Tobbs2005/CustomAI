@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  //@ts-expect-error
   apiVersion: "2023-08-16",
   typescript: true,
 });
@@ -159,6 +160,7 @@ export async function POST(req: NextRequest) {
         // ✅ Grant access to the product
         const stripeObject: Stripe.Invoice = event.data
           .object as Stripe.Invoice;
+         //@ts-expect-error
         const priceId = stripeObject.lines.data[0].price.id;
         const customerId = stripeObject.customer;
 

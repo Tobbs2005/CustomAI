@@ -27,6 +27,7 @@ const promptLLM = async ({userMessage} : promptProps) => {
 
     if(data.error){
         console.log(data.error.message);
+        throw new Error(data.error.message);
     }
 
     return data.choices?.[0]?.message?.content || "No response";

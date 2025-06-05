@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import promptLLM from '@/lib/actions/promptLLM';
-import getTokenCount from '@/lib/actions/getTokenCount';
 
 enum UserState {
   READY = 'READY',
@@ -55,6 +54,7 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
       console.error("Error calling LLM:", error);
       setResponseText("Something went wrong.");
       setUserState(UserState.READY);
+      return;
     }
 
 
