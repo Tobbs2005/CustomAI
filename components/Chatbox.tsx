@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import newMessage from '@/lib/actions/newMessage';
@@ -99,11 +99,24 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
       </div>
     ]);
 
+
   };
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [chatData, chatBlocks]);
+
+  // Scroll to bottom when chatData changes
+  const scrollRef = useRef<HTMLDivElement>(null);
+
 
   return (
     <main>
-      <div className='border border-black border-solid rounded p-2'>
+      <div 
+      ref={scrollRef}
+      className='border border-black border-solid rounded p-2 h-[500px] overflow-y-auto'>
         <div className="text-sm text-muted-foreground">
           {
           chatData.map((msg) => (
@@ -121,8 +134,6 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
             </div>
           ))
           }
-
-          
           {chatBlocks || "LLM response will appear here."}
         </div>
       </div>
