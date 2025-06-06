@@ -1,10 +1,11 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import newMessage from '@/lib/actions/newMessage';
 import { getChat } from '@/lib/actions/chatActions';
+
 
 enum UserState {
   READY = 'READY',
@@ -17,31 +18,42 @@ interface ChatboxProps {
 }
 
 const Chatbox = ({ chatId }: ChatboxProps) => {
+  
   const [userState, setUserState] = useState<UserState>(UserState.READY);
   const [userInput, setUserInput] = useState("");
   const [responseText, setResponseText] = useState<string | null>(null);
-  const [tokenCount, setTokenCount] = useState<number | null>(null)
+  const [tokenCount, setTokenCount] = useState<number | null>(null);
+  const [chatData, setChatData] = useState<any[]>([]); // adjust type as needed
 
-  const fetchTokenCount = async () => {
-    const res = await fetch('/api/get-token-count');
-    const data = await res.json();
-    if (data.success) {
-      setTokenCount(data.token_count);
-    } else {
-      setUserState(UserState.OUT_OF_TOKENS);
-    }
-  };
-
+  // Fetch chat messages
   useEffect(() => {
+    const fetchChat = async () => {
+      const data = await getChat(chatId);
+      
+      console.log("Chat data:", data);
+    };
+    fetchChat();
+  }, [chatId]);
+
+  // Fetch token count
+  useEffect(() => {
+    const fetchTokenCount = async () => {
+      const res = await fetch('/api/get-token-count');
+      const data = await res.json();
+      if (data.success) {
+        setTokenCount(data.token_count);
+      } else {
+        setUserState(UserState.OUT_OF_TOKENS);
+      }
+    };
+
     fetchTokenCount();
   }, []);
 
-  
-
   const handleSubmit = async () => {
-    const submittedText = userInput
+    const submittedText = userInput;
 
-    if(tokenCount<1){
+    if (tokenCount! < 1) {
       setResponseText("Out of tokens");
       setUserState(UserState.OUT_OF_TOKENS);
       return;
@@ -49,10 +61,10 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
 
     setUserInput("");
     try {
-      setUserState(UserState.FETCHING)
-      const res = await newMessage({ userMessage: submittedText, cost: 1, chatId: chatId}); 
-      setUserState(UserState.READY);
+      setUserState(UserState.FETCHING);
+      const res = await newMessage({ userMessage: submittedText, cost: 1, chatId }); 
       setResponseText(res);
+      setUserState(UserState.READY);
     } catch (error) {
       console.error("Error calling LLM:", error);
       setResponseText("Something went wrong.");
@@ -60,26 +72,22 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
       return;
     }
 
-
-    const deductRes = await fetch('/api/deduct-tokens', {
+    await fetch('/api/deduct-tokens', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount: 1 }), // send the number of tokens to deduct
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: 1 }),
     });
-    fetchTokenCount();
-    const data = await deductRes.json();
-  }
 
-
-  const chatData = getChat(chatId);
+    // Refresh token count
+    const tokenRes = await fetch('/api/get-token-count');
+    const tokenData = await tokenRes.json();
+    setTokenCount(tokenData.token_count);
+  };
 
   return (
     <main>
       <div className='border border-black border-solid rounded p-2'>
         <div className="text-sm text-muted-foreground">
-          
           {responseText || "LLM response will appear here."}
         </div>
       </div>
@@ -92,23 +100,14 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
           className="resize-none"
         />
         {
-        userState === UserState.READY ? (
-          <Button onClick={handleSubmit} className="mt-2">
-            Submit
-          </Button>
-        ) 
-        : 
-        userState === UserState.OUT_OF_TOKENS ?
-        <Button disabled className="mt-2"> 
-          Out of tokens
-        </Button>
-        :
-        <Button disabled className="mt-2">
-          Waiting
-        </Button>
+          userState === UserState.READY ? (
+            <Button onClick={handleSubmit} className="mt-2">Submit</Button>
+          ) : userState === UserState.OUT_OF_TOKENS ? (
+            <Button disabled className="mt-2">Out of tokens</Button>
+          ) : (
+            <Button disabled className="mt-2">Waiting</Button>
+          )
         }
-
-        
       </div>
 
       <p>Token count: {tokenCount ?? "Loading..."}</p>

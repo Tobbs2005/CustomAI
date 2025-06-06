@@ -13,7 +13,8 @@ export const newChat = async () => {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    throw new Error("Must be logged in to create new chat");
+    console.log("Must be logged in to create new chat");
+    return;
   }
 
   const { data, error } = await supabase
@@ -31,22 +32,10 @@ export const newChat = async () => {
 export const getChat = async (chatId : string) => {
   const supabase = createClient();
 
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("Must be logged in to create new chat");
-  }
-
-  const userId = user.id;
-
   const { data, error } = await supabase
     .from("messages")
     .select("*")
     .eq("chat_id", chatId)
-    .eq("user_id", userId)
     .order("created_at", { ascending: true });
 
   if(error){
