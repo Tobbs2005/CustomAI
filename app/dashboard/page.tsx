@@ -3,6 +3,7 @@ import ButtonAccount from "@/components/ButtonAccount";
 import Pricing from "@/components/Pricing";
 import checkUserAccess from "@/lib/actions/checkUserAccess";
 import NewChatButton from "@/components/NewChatButton";
+import ChatSidebar from "@/components/ChatSidebar/ChatSidebar";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,8 @@ export default async function Dashboard() {
         <ButtonAccount />
 
         {checkUserAccess ? 
-        <div>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
+          <ChatSidebar />
           <NewChatButton />
         </div>
         :

@@ -73,3 +73,25 @@ export const getChatList = async (user: { id: string }) => {
   console.log("Query result for user_id =", user.id, ":", data);
   return data || [];
 };
+
+export const deleteChat = async (chatId: string) => {
+  const supabase = createClient();
+
+  if (!chatId) {
+    console.log("No chat ID provided. Cannot delete chat.");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("chats")
+    .delete()
+    .eq("id", chatId);
+
+  if (error) {
+    console.error("Error deleting chat:", error.message);
+    return false;
+  }
+
+  console.log(`Chat with ID ${chatId} deleted successfully.`);
+  return true;
+}
