@@ -65,7 +65,7 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
     setUserInput("");
     try {
       setUserState(UserState.FETCHING);
-      res = await newMessage({ userMessage: submittedText, cost: 1, chatId }); 
+      res = await newMessage({ userMessage: submittedText, chatId }); 
       setResponseText(res);
       setUserState(UserState.READY);
     } catch (error) {

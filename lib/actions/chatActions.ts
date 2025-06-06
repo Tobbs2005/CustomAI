@@ -57,8 +57,6 @@ export const getChatList = async (user: { id: string }) => {
     return [];
   }
 
-  console.log("Logged-in user:", user);
-
   const { data, error } = await supabase
     .from("chats")
     .select("*")
@@ -70,7 +68,6 @@ export const getChatList = async (user: { id: string }) => {
     return [];
   }
 
-  console.log("Query result for user_id =", user.id, ":", data);
   return data || [];
 };
 

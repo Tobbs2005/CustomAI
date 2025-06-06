@@ -4,17 +4,20 @@ import deductTokens from "./deductTokens"
 import promptLLM from "./promptLLM";
 import getTokenCount from "./getTokenCount";
 import { createClient } from "@/lib/supabase/server";
+import { calculateTokenCost } from "./calculateTokenCost";
 
 type MessageProps = {
-    cost: number
     userMessage: string
     chatId: string
 }
 
 
-const newMessage = async ({cost, userMessage, chatId} : MessageProps) => {
+const newMessage = async ({userMessage, chatId} : MessageProps) => {
+    const cost = await calculateTokenCost(userMessage);
 
     try {
+
+        
         const supabase = createClient();
 
         if(await getTokenCount() < cost){
