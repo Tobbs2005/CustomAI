@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import config from "@/config";
@@ -24,6 +24,9 @@ export default async function LayoutPrivate({
   }
 
   return (
-      <>{children}</>
+    <>
+      {/* Pass the user as a prop */}
+      {React.cloneElement(children as React.ReactElement, { user })}
+    </>
   );
 }

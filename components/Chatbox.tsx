@@ -23,13 +23,15 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
   const [userInput, setUserInput] = useState("");
   const [responseText, setResponseText] = useState<string | null>(null);
   const [tokenCount, setTokenCount] = useState<number | null>(null);
-  const [chatData, setChatData] = useState<any[]>([]); // adjust type as needed
+  const [chatData, setChatData] = useState<any[]>([]);
+  const [chatBlocks, setChatBlocks] = useState<JSX.Element[]>([]);
+
 
   // Fetch chat messages
   useEffect(() => {
     const fetchChat = async () => {
       const data = await getChat(chatId);
-      
+      setChatData(data || []);
       console.log("Chat data:", data);
     };
     fetchChat();
@@ -52,6 +54,7 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
 
   const handleSubmit = async () => {
     const submittedText = userInput;
+    let res;
 
     if (tokenCount! < 1) {
       setResponseText("Out of tokens");
@@ -62,7 +65,7 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
     setUserInput("");
     try {
       setUserState(UserState.FETCHING);
-      const res = await newMessage({ userMessage: submittedText, cost: 1, chatId }); 
+      res = await newMessage({ userMessage: submittedText, cost: 1, chatId }); 
       setResponseText(res);
       setUserState(UserState.READY);
     } catch (error) {
@@ -82,13 +85,45 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
     const tokenRes = await fetch('/api/get-token-count');
     const tokenData = await tokenRes.json();
     setTokenCount(tokenData.token_count);
+
+
+    setChatBlocks(prev => [
+      ...prev,
+      <div key={Date.now()} className="mb-4">
+        <h1 className='font-bold underline'>User:</h1>
+        <p>{submittedText}</p>
+        <br/>
+        <h1 className='font-bold underline'>LLM:</h1>
+        <p>{res}</p>
+        <br/>
+      </div>
+    ]);
+
   };
 
   return (
     <main>
       <div className='border border-black border-solid rounded p-2'>
         <div className="text-sm text-muted-foreground">
-          {responseText || "LLM response will appear here."}
+          {
+          chatData.map((msg) => (
+            <div key={msg.id}>
+              <h1 className='font-bold underline'>User: </h1>
+              <p>
+              {msg.content}
+              </p>
+              <br/>
+              <h1 className='font-bold underline'>LLM: </h1>
+              <p>
+              {msg.response}
+              </p>
+              <br/>
+            </div>
+          ))
+          }
+
+          
+          {chatBlocks || "LLM response will appear here."}
         </div>
       </div>
 
