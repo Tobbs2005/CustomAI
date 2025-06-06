@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import promptLLM from '@/lib/actions/promptLLM';
 import newMessage from '@/lib/actions/newMessage';
+import { getChat } from '@/lib/actions/chatActions';
 
 enum UserState {
   READY = 'READY',
@@ -32,7 +32,9 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
     }
   };
 
-  fetchTokenCount();
+  useEffect(() => {
+    fetchTokenCount();
+  }, []);
 
   
 
@@ -70,10 +72,14 @@ const Chatbox = ({ chatId }: ChatboxProps) => {
     const data = await deductRes.json();
   }
 
+
+  const chatData = getChat(chatId);
+
   return (
     <main>
       <div className='border border-black border-solid rounded p-2'>
         <div className="text-sm text-muted-foreground">
+          
           {responseText || "LLM response will appear here."}
         </div>
       </div>

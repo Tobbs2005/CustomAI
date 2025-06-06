@@ -50,7 +50,7 @@ const newMessage = async ({cost, userMessage, chatId} : MessageProps) => {
         return llmResponse;
     }
     catch (error) {
-        console.log("an error as occurred")
+        console.log(error.message)
     }
     
     

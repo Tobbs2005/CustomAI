@@ -13,7 +13,7 @@ const promptLLM = async ({userMessage} : promptProps) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemma-3n-e4b-it:free',
+        model: 'meta-llama/llama-3.3-8b-instruct:free',
         messages: [
           {
             role: 'user',
@@ -26,7 +26,6 @@ const promptLLM = async ({userMessage} : promptProps) => {
     const data = await response.json();
 
     if(data.error){
-        console.log(data.error.message);
         throw new Error(data.error.message);
     }
 

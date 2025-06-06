@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import newChat from '@/lib/actions/chatActions'
+import { newChat}  from '@/lib/actions/chatActions'
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 

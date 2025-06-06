@@ -1,10 +1,8 @@
 'use client';
 
-
-import React from 'react';
 import { createClient } from "@/lib/supabase/client";
 
-const newChat = async () => {
+export const newChat = async () => {
   const supabase = createClient();
 
 
@@ -25,10 +23,37 @@ const newChat = async () => {
     .single();
   if (error) {
     console.error("Error creating chat:", error.message);
-    throw new Error(error.message)
   }
   
-    return data;
+    return data || null;
 }
 
-export default newChat
+export const getChat = async (chatId : string) => {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Must be logged in to create new chat");
+  }
+
+  const userId = user.id;
+
+  const { data, error } = await supabase
+    .from("messages")
+    .select("*")
+    .eq("chat_id", chatId)
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true });
+
+  if(error){
+    console.error("Error fetching chat:", error.message);
+  }
+
+  return data || "no data";
+}
+
+
