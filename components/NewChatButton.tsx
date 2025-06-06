@@ -9,6 +9,7 @@ const NewChatButton = () => {
   const router = useRouter();
 
   async function createNewChat() {
+    router.refresh(); // Refresh the page to ensure the latest chat list is displayed
     try {
       const data = await newChat();
       if (data?.id) {
