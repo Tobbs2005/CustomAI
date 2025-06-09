@@ -7,7 +7,7 @@ const promptCoze = async ({ userMessage }: promptProps) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer pat_axUaOnslRyQEGn7PbaMfxc9KkFEqKtLQzXd050odrxgl4fcYTD6gHsm7U2sGRcql`,  // your Coze token
+      'Authorization': `Bearer ${process.env.COZE_API_TOKEN}`,  // your Coze token
     },
     body: JSON.stringify({
       bot_id: process.env.COZE_BOT_ID,       // get this from your Coze dashboard
