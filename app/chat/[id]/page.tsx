@@ -3,7 +3,6 @@ import Chatbox from "@/components/Chatbox";
 import ChatSidebar from "@/components/ChatSidebar/ChatSidebar";
 import DeleteChatButton from "@/components/DeleteChatButton";
 import NewChatButton from "@/components/NewChatButton";
-import { redirect } from "next/navigation";
 
 
 const Page = ({ params }: { params: { id: string } }) => {

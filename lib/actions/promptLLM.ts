@@ -1,6 +1,3 @@
-import { error } from "console";
-import { stringify } from "querystring";
-
 type promptProps = {
     userMessage: string
 }

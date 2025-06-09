@@ -5,6 +5,7 @@ import promptLLM from "./promptLLM";
 import getTokenCount from "./getTokenCount";
 import { createClient } from "@/lib/supabase/server";
 import { calculateTokenCost } from "./calculateTokenCost";
+import promptCoze from "./promptCoze";
 
 type MessageProps = {
     userMessage: string
@@ -49,11 +50,12 @@ const newMessage = async ({userMessage, chatId} : MessageProps) => {
             throw new Error(error.message)
         }
 
-        deductTokens(cost);
+        await deductTokens(cost);
         return llmResponse;
     }
     catch (error) {
         console.log(error.message)
+        throw new Error(error.message || "Unexpected error"); // rethrow
     }
     
     
